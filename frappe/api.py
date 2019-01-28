@@ -41,6 +41,8 @@ def handle():
 	"""
 
 	validate_auth()
+    validate_auth_via_api_keys()
+    validate_jwt(frappe.get_request_header("Authorization", None))
 
 	parts = frappe.request.path[1:].split("/",3)
 	call = doctype = name = None
@@ -222,6 +224,26 @@ def validate_auth_via_api_keys(authorization_header):
 		frappe.throw(_("Failed to decode token, please provide a valid base64-encoded token."), frappe.InvalidAuthorizationToken)
 	except (AttributeError, TypeError, ValueError):
 		frappe.throw(_("Invalid token, please provide a valid token with prefix 'Basic' or 'Token'."), frappe.InvalidAuthorizationToken)
+
+
+def validate_jwt(jwt_token):
+	"""
+		Next JWT authentication using api key and api secret
+	"""
+	import jwt
+	from newmatik.next.helpers import get_jwt_config
+
+	if jwt_token and not any(x in jwt_token for x in ['token', 'Basic', 'bearer']):
+		jwt_config = get_jwt_config()
+		try:
+			payload = jwt.decode(
+				jwt_token, jwt_config['JWT_SECRET'], jwt_config['JWT_ALGORITHM']
+				)
+		except jwt.ExpiredSignatureError:
+			raise ExpiredLoginException()
+
+		frappe.local.user_id = payload['user_id']
+		validate_api_key_secret(payload['key'], payload['secret'])
 
 
 def validate_api_key_secret(api_key, api_secret):
