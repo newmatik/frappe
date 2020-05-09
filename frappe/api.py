@@ -160,19 +160,24 @@ class ExpiredLoginException(Exception):
 def handle():
 	"""
 	Handler for `/api` methods
+
 	# Examples:
+
 	`/api/method/{methodname}` will call a whitelisted method
+
 	`/api/resource/{doctype}` will query a table
 			examples:
 			- `?fields=["name", "owner"]`
 			- `?filters=[["Task", "name", "like", "%005"]]`
 			- `?limit_start=0`
 			- `?limit_page_length=20`
+
 	`/api/resource/{doctype}/{name}` will point to a resource
 			`GET` will return doclist
 			`POST` will insert
 			`PUT` will update
 			`DELETE` will delete
+
 	`/api/resource/{doctype}/{name}?run_method={method}` will run a whitelisted controller method
 	"""
 
@@ -306,6 +311,7 @@ def validate_oauth():
 def validate_auth_via_api_keys():
 	"""
 	authentication using api key and api secret
+
 	set user
 	"""
 	try:
