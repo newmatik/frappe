@@ -27,6 +27,7 @@ def get_info(show_failed=False):
 			jobs.append({
 				'job_name': j.kwargs.get('kwargs', {}).get('playbook_method') \
 					or str(j.kwargs.get('job_name')),
+				'job_id': j.id,
 				'status': j.status, 'queue': name,
 				'creation': format_datetime(j.created_at),
 				'color': colors[j.status]
