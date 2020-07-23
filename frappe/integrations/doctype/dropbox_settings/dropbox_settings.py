@@ -45,7 +45,7 @@ def take_backups_weekly():
 
 def take_backups_if(freq):
 	if frappe.db.get_value("Dropbox Settings", None, "backup_frequency") == freq:
-		take_backup_to_dropbox()
+		enqueue("frappe.integrations.doctype.dropbox_settings.dropbox_settings.take_backup_to_dropbox", queue='long', timeout=1500)
 
 def take_backup_to_dropbox(retry_count=0, upload_db_backup=True):
 	did_not_upload, error_log = [], []
