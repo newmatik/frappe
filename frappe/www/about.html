@@ -32,7 +32,7 @@
 	<div class="about-section">
 	<h3>{{ doc.team_members_heading or "Team Members" }}</h3>
 	{% for d in doc.get({"doctype":"About Us Team Member"}) %}
-	<div class="row" itemscope itemtype="http://schema.org/Person">
+	<div class="row my-4" itemscope itemtype="http://schema.org/Person">
 		<span class="col-md-2">
 			<div class="avatar avatar-large">
 				<img class="avatar" src="{{ d.image_link }}" style="" itemprop="image">
